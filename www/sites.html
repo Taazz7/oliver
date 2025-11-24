@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Gestor de contraseñas - Sites</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header>
+    <h1>Pass saver</h1>
+    <nav>
+      <a href="index.html"><button>Inicio</button></a>
+      <a href="categorias.html"><button>Add categories</button></a>
+      <a href="sites.html"><button>Add site</button></a>
+    </nav>
+  </header>
+
+  <main>
+    <section>
+      <h2>Lista de sitios</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Sitio</th>
+            <th>User</th>
+            <th>Created at</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="sitesTableBody"></tbody>
+      </table>
+    </section>
+
+    <section>
+      <h2>Añadir nuevo site</h2>
+      <form id="formAddSite">
+        <label for="siteName">Sitio</label>
+        <input type="text" id="siteName" required />
+
+        <label for="siteUser">Usuario</label>
+        <input type="text" id="siteUser" required />
+
+        <label for="sitePass">Contraseña</label>
+        <input type="password" id="sitePass" required />
+
+        <label for="siteUrl">URL</label>
+        <input type="url" id="siteUrl" />
+
+        <label for="siteCategory">Categoría</label>
+        <select id="siteCategory"></select>
+
+        <button type="submit">Añadir site</button>
+      </form>
+    </section>
+  </main>
+
+  <script src="sites.js"></script>
+</body>
+</html>

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Gestor de contraseñas - Inicio</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body>
+  <header>
+    <h1>Pass saver</h1>
+    <nav>
+      <a href="index.html"><button>Inicio</button></a>
+      <a href="categorias.html"><button>Add categories</button></a>
+      <a href="sites.html"><button>Add site</button></a>
+    </nav>
+
+  </header>
+
+  <main>
+    <!-- Panel lateral: categorías -->
+    <aside>
+      <h2>Categorías</h2>
+      <div id="categoryList">
+        <!-- Aquí se cargarán las categorías desde index.js -->
+         <ul></ul>
+      </div>
+    </aside>
+
+    <!-- Sección principal: sites -->
+    <section>
+      <h2>Lista de sitios</h2>
+      
+      <table>
+        <thead>
+          <tr>
+            <th>Sitio</th>
+            <th>User</th>
+            <th>Created at</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="sitesTableBody">
+          <!-- Aquí se cargarán los sites de la categoría seleccionada -->
+        </tbody>
+      </table>
+    </section>
+  </main>
+
+  <!-- JS que gestiona navegación y carga de datos -->
+  <script src="index.js"></script>
+  <!-- sweet alert -->
+
+</body>
+</html>
