@@ -68,6 +68,8 @@ async function addNewSite() {
   } catch (err) {
     console.error("Error agregando site:", err);
   }
+ 
+
 }
 
 // ======== LIMPIAR FORMULARIO ========

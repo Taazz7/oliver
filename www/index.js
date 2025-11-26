@@ -10,7 +10,12 @@ let drawData = (data) => {
     // Texto del nombre
     let nameSpan = document.createElement('button');
     nameSpan.innerText = category.name;
-    let className = category.name;
+    
+    // Clase con el nombre (usado ChatGPT)
+    let className = category.name
+      .toLowerCase()
+      .replace(/\s+/g, '-')
+      .replace(/[^a-z0-9\-]/g, '');
     nameSpan.classList.add(className);
 
      // Al hacer clic, cargar los sites de esa categoría
@@ -121,7 +126,7 @@ function addDeleteSiteEvents() {
 
         if (!res.ok) throw new Error("No se pudo borrar");
 
-        loadSites(); // o loadSitesByCategory si quieres mantener la vista filtrada
+        loadSitesByCategory();
       } catch (err) {
         console.error(err);
         Swal.fire({
@@ -133,8 +138,3 @@ function addDeleteSiteEvents() {
   });
 }
 
-
-// INICIALIZAR
-document.addEventListener("DOMContentLoaded", () => {
-  loadSites();
-});
