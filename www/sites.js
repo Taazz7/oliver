@@ -1,107 +1,120 @@
-// sites.js
+// ======== CONFIGURACION ========
+const API_URL = "http://localhost:3000";
 
-// Referencias al DOM
-const formAddSite = document.getElementById("formAddSite");
-const siteName = document.getElementById("siteName");
-const siteUser = document.getElementById("siteUser");
-const sitePass = document.getElementById("sitePass");
-const siteUrl = document.getElementById("siteUrl");
-const siteCategory = document.getElementById("siteCategory");
-const sitesTableBody = document.getElementById("sitesTableBody");
+// ======== CARGAR CATEGORÍAS EN EL SELECT ========
+async function loadCategories() {
+  const select = document.getElementById("siteCategory");
+  select.innerHTML = ""; // limpiar antes
 
-// URL base del servidor (ajústala según tu backend)
-const API_URL = "http://localhost:3000"; // ejemplo
+  try {
+    const res = await fetch(`${API_URL}/categories`);
+    const categories = await res.json();
 
-// --- Funciones de API ---
-async function getSitesByCategory(categoryId) {
-  const res = await fetch(`${API_URL}/categorias/${categoryId}/sites`);
-  return res.json();
-}
+    // Añadir opción por defecto
+    const defaultOpt = document.createElement("option");
+    defaultOpt.value = "";
+    defaultOpt.textContent = "Selecciona una categoría";
+    select.appendChild(defaultOpt);
 
-async function addSite(data) {
-  const res = await fetch(`${API_URL}/sites`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(data)
-  });
-  return res.json();
-}
-
-async function deleteSite(id) {
-  await fetch(`${API_URL}/sites/${id}`, { method: "DELETE" });
-}
-
-// --- Funciones de UI ---
-function renderSites(sites) {
-  sitesTableBody.innerHTML = "";
-  if (sites.length === 0) {
-    const tr = document.createElement("tr");
-    const td = document.createElement("td");
-    td.colSpan = 4;
-    td.textContent = "No hay sitios en esta categoría.";
-    tr.appendChild(td);
-    sitesTableBody.appendChild(tr);
-    return;
-  }
-
-  sites.forEach(site => {
-    const tr = document.createElement("tr");
-
-    const tdSite = document.createElement("td");
-    tdSite.textContent = site.nombre;
-
-    const tdUser = document.createElement("td");
-    tdUser.textContent = site.usuario;
-
-    const tdCreated = document.createElement("td");
-    tdCreated.textContent = new Date(site.createdAt).toLocaleDateString();
-
-    const tdActions = document.createElement("td");
-    const delBtn = document.createElement("button");
-    delBtn.textContent = "🗑️";
-    delBtn.title = "Eliminar";
-    delBtn.addEventListener("click", async () => {
-      if (confirm("¿Eliminar este site?")) {
-        await deleteSite(site.id);
-        loadSites(site.categoriaId);
-      }
+    // Agregar cada categoría
+    categories.forEach(cat => {
+      const option = document.createElement("option");
+      option.value = cat.id;          // tu API debe devolver id
+      option.textContent = cat.name;  // y name
+      select.appendChild(option);
     });
-    tdActions.appendChild(delBtn);
 
-    tr.append(tdSite, tdUser, tdCreated, tdActions);
-    sitesTableBody.appendChild(tr);
-  });
+  } catch (err) {
+    console.error("Error cargando categorías:", err);
+  }
 }
 
-// --- Eventos ---
-formAddSite.addEventListener("submit", async (e) => {
-  e.preventDefault();
+// ======== AÑADIR NUEVO SITE ========
+async function addNewSite() {
+  const name = document.getElementById("siteName").value;
+  const user = document.getElementById("siteUser").value;
+  const password = document.getElementById("sitePass").value;
+  const url = document.getElementById("siteUrl").value;
+  const categoryId = document.getElementById("siteCategory").value;
 
-  const nombre = siteName.value.trim();
-  const usuario = siteUser.value.trim();
-  const password = sitePass.value.trim();
-  const url = siteUrl.value.trim();
-  const categoriaId = siteCategory.value;
-
-  // Validaciones obligatorias
-  if (!nombre || !usuario || !password) {
-    alert("Nombre, usuario y contraseña son obligatorios");
+  if (!categoryId) {
+    alert("Debes seleccionar una categoría");
     return;
   }
 
-  await addSite({ nombre, usuario, password, url, categoriaId });
-  formAddSite.reset();
-  loadSites(categoriaId);
+  const newSite = {
+    name,
+    user,
+    password,
+    url,
+    description: "Sin descripción"
+  };
+
+  try {
+    const res = await fetch(`${API_URL}/categories/${categoryId}`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(newSite)
+    });
+
+    if (!res.ok) {
+      throw new Error("Error al añadir el site");
+    }
+
+    alert("Site añadido correctamente");
+    clearForm();
+    loadSites();
+
+  } catch (err) {
+    console.error("Error agregando site:", err);
+  }
+}
+
+// ======== LIMPIAR FORMULARIO ========
+function clearForm() {
+  document.getElementById("siteName").value = "";
+  document.getElementById("siteUser").value = "";
+  document.getElementById("sitePass").value = "";
+  document.getElementById("siteUrl").value = "";
+  document.getElementById("siteCategory").value = "";
+}
+
+// ======== CARGAR LISTA DE SITES (OPCIONAL) ========
+async function loadSites() {
+  const tableBody = document.querySelector("#tableSites tbody");
+  if (!tableBody) return;
+
+  tableBody.innerHTML = "";
+
+  try {
+    const res = await fetch(`${API_URL}/sites`);
+    const sites = await res.json();
+
+    sites.forEach(site => {
+      const tr = document.createElement("tr");
+
+      tr.innerHTML = `
+        <td>${site.name}</td>
+        <td>${site.user}</td>
+        <td>${new Date(site.created_at).toLocaleString()}</td>
+        <td><button data-id="${site.id}" class="btnDelete">Eliminar</button></td>
+      `;
+
+      tableBody.appendChild(tr);
+    });
+
+  } catch (err) {
+    console.error("Error cargando sites:", err);
+  }
+}
+
+// ======== EVENTOS ========
+document.addEventListener("DOMContentLoaded", () => {
+  loadCategories();
+  loadSites();
+
+  const btnAdd = document.getElementById("submitBtn");
+  if (btnAdd) {
+    btnAdd.addEventListener("click", addNewSite);
+  }
 });
-
-// --- Inicialización ---
-async function loadSites(categoryId) {
-  const sites = await getSitesByCategory(categoryId);
-  renderSites(sites);
-}
-
-// Ejemplo: cargar sites de la categoría activa (ajusta según tu lógica)
-const activeCategoryId = siteCategory.value;
-if (activeCategoryId) {
-  loadSites(activeCategoryId);
-}
