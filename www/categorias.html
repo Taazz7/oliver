@@ -10,29 +10,21 @@
     <h1>Pass saver</h1>
     <nav>
       <a href="index.html"><button>Inicio</button></a>
-      <a href="categorias.html"><button>Add categories</button></a>
-      <a href="sites.html"><button>Add site</button></a>
+      <a href="categorias.html"><button>Añade Categorias</button></a>
+      <a href="sites.html"><button>Añade Sites</button></a>
     </nav>
   </header>
 
   <main>
-    <aside>
+    <div class="formato">
       <h2>Categorías</h2>
       <div id="categoryList"></div>
       <div id="formAddCategory">
         <input type="text" id="categoryInput" placeholder="Nombre de la categoría">
         <button id="addCategoryBtn">Añadir Categoría</button>
       </div>
-    </aside>
+    </div>
 
-    <section>
-      <h2>Editar categoría seleccionada</h2>
-      <div id="formEditCategory">
-        <label for="editCategoryName">Nombre</label>
-        <input type="text" id="editCategoryName" required />
-        <button type="submit">Guardar cambios</button>
-      </div>
-    </section>
   </main>
 
   <script src="categorias.js"></script>  

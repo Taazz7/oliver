@@ -5,6 +5,8 @@ let drawData = (data) => {
     let child = document.createElement('li');
     child.classList.add("category-item");
 
+    // Borrado Categorias
+
     // Texto del nombre
     let nameSpan = document.createElement('button');
     nameSpan.innerText = category.name;

@@ -191,3 +191,7 @@ form button {
 .delete-btn:hover {
   color: red;
 }
+
+.formato{
+  align-content: center;
+}

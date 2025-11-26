@@ -29,6 +29,9 @@ document.getElementById("addCategoryBtn").addEventListener("click", async () => 
       const data = await res.json();
       console.log("Categoría guardada:", data);
 
+      // Redirigir a index.html
+      window.location.href = "index.html"; 
+
   } catch (err) {
     console.log(name);
       console.error(err);
