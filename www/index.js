@@ -64,7 +64,9 @@ fetch("http://localhost:3000/categories")
 // ===============================
 // NUEVO: CARGAR SITES de categoría
 // ===============================
+let Catid = null;
 async function loadSitesByCategory(categoryId) {
+  Catid = categoryId;
   try {
     const res = await fetch(`http://localhost:3000/categories/${categoryId}`);
     const data = await res.json();
@@ -126,7 +128,7 @@ function addDeleteSiteEvents() {
 
         if (!res.ok) throw new Error("No se pudo borrar");
 
-        loadSitesByCategory();
+        loadSitesByCategory(Catid); // --
       } catch (err) {
         console.error(err);
         Swal.fire({
