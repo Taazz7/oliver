@@ -88,7 +88,7 @@ function drawSites(sites) {
     tr.innerHTML = `
       <td>${site.name}</td>
       <td>${site.user}</td>
-      <td>${new Date(site.created_at).toLocaleString()}</td>
+      <td>${site.url}</td>
       <td>
         <button class="delete-site" data-id="${site.id}">🗑️</button>
       </td>
